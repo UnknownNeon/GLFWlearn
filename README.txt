@@ -1,1 +1,0 @@
-Program to make a GLFW window with error logging and shader from a file.

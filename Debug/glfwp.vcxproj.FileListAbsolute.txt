@@ -1,0 +1,2 @@
+C:\Users\twidl\OneDrive\Desktop\Glfw\glfwp\Debug\glfwp.exe
+D:\Glfw\glfwp\Debug\glfwp.exe

@@ -30,5 +30,6 @@
   <ItemGroup>
     <None Include="Dependencies\Shaders\Shader.shader" />
     <None Include="Dependencies\Shaders\Shader2.shader" />
+    <None Include=".gitignore" />
   </ItemGroup>
 </Project>

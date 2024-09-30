@@ -154,6 +154,7 @@
     <ClInclude Include="src\glwindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitignore" />
     <None Include="Dependencies\Shaders\Shader.shader" />
     <None Include="Dependencies\Shaders\Shader2.shader" />
   </ItemGroup>

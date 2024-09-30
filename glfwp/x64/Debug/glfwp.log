@@ -1,0 +1,45 @@
+﻿  Application.cpp
+  glwindow.cpp
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(178,50): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(182,52): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(210,79): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(277,33): warning C4101: 'n4': unreferenced local variable
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(276,33): warning C4101: 'v4': unreferenced local variable
+  Generating Code...
+glwindow.obj : error LNK2019: unresolved external symbol __imp_glClear referenced in function "private: void __cdecl glWindow::loop(void)" (?loop@glWindow@@AEAAXXZ)
+glwindow.obj : error LNK2019: unresolved external symbol __imp_glDrawArrays referenced in function "private: void __cdecl glWindow::loop(void)" (?loop@glWindow@@AEAAXXZ)
+glwindow.obj : error LNK2019: unresolved external symbol __imp_glEnable referenced in function "private: void __cdecl glWindow::init(void)" (?init@glWindow@@AEAAXXZ)
+glwindow.obj : error LNK2019: unresolved external symbol __imp_glPolygonMode referenced in function "private: void __cdecl glWindow::init(void)" (?init@glWindow@@AEAAXXZ)
+glwindow.obj : error LNK2019: unresolved external symbol glewInit referenced in function "private: void __cdecl glWindow::init(char const *,int,int,bool,bool)" (?init@glWindow@@AEAAXPEBDHH_N1@Z)
+glwindow.obj : error LNK2019: unresolved external symbol glfwInit referenced in function "private: void __cdecl glWindow::init(char const *,int,int,bool,bool)" (?init@glWindow@@AEAAXPEBDHH_N1@Z)
+glwindow.obj : error LNK2019: unresolved external symbol glfwTerminate referenced in function "public: __cdecl glWindow::~glWindow(void)" (??1glWindow@@QEAA@XZ)
+glwindow.obj : error LNK2019: unresolved external symbol glfwGetPrimaryMonitor referenced in function "private: void __cdecl glWindow::init(char const *,int,int,bool,bool)" (?init@glWindow@@AEAAXPEBDHH_N1@Z)
+glwindow.obj : error LNK2019: unresolved external symbol glfwCreateWindow referenced in function "private: void __cdecl glWindow::init(char const *,int,int,bool,bool)" (?init@glWindow@@AEAAXPEBDHH_N1@Z)
+glwindow.obj : error LNK2019: unresolved external symbol glfwWindowShouldClose referenced in function "private: void __cdecl glWindow::loop(void)" (?loop@glWindow@@AEAAXXZ)
+glwindow.obj : error LNK2019: unresolved external symbol glfwSetWindowShouldClose referenced in function "private: void __cdecl glWindow::pollEvents(void)" (?pollEvents@glWindow@@AEAAXXZ)
+glwindow.obj : error LNK2019: unresolved external symbol glfwPollEvents referenced in function "private: void __cdecl glWindow::pollEvents(void)" (?pollEvents@glWindow@@AEAAXXZ)
+glwindow.obj : error LNK2019: unresolved external symbol glfwGetKey referenced in function "private: void __cdecl glWindow::pollEvents(void)" (?pollEvents@glWindow@@AEAAXXZ)
+glwindow.obj : error LNK2019: unresolved external symbol glfwMakeContextCurrent referenced in function "private: void __cdecl glWindow::init(char const *,int,int,bool,bool)" (?init@glWindow@@AEAAXPEBDHH_N1@Z)
+glwindow.obj : error LNK2019: unresolved external symbol glfwSwapBuffers referenced in function "private: void __cdecl glWindow::loop(void)" (?loop@glWindow@@AEAAXXZ)
+glwindow.obj : error LNK2019: unresolved external symbol glfwSwapInterval referenced in function "private: void __cdecl glWindow::init(char const *,int,int,bool,bool)" (?init@glWindow@@AEAAXPEBDHH_N1@Z)
+glwindow.obj : error LNK2001: unresolved external symbol __glewBindBuffer
+glwindow.obj : error LNK2001: unresolved external symbol __glewBufferData
+glwindow.obj : error LNK2001: unresolved external symbol __glewGenBuffers
+glwindow.obj : error LNK2001: unresolved external symbol __glewAttachShader
+glwindow.obj : error LNK2001: unresolved external symbol __glewCompileShader
+glwindow.obj : error LNK2001: unresolved external symbol __glewCreateProgram
+glwindow.obj : error LNK2001: unresolved external symbol __glewCreateShader
+glwindow.obj : error LNK2001: unresolved external symbol __glewDeleteShader
+glwindow.obj : error LNK2001: unresolved external symbol __glewEnableVertexAttribArray
+glwindow.obj : error LNK2001: unresolved external symbol __glewGetShaderInfoLog
+glwindow.obj : error LNK2001: unresolved external symbol __glewGetShaderiv
+glwindow.obj : error LNK2001: unresolved external symbol __glewGetUniformLocation
+glwindow.obj : error LNK2001: unresolved external symbol __glewLinkProgram
+glwindow.obj : error LNK2001: unresolved external symbol __glewShaderSource
+glwindow.obj : error LNK2001: unresolved external symbol __glewUniformMatrix4fv
+glwindow.obj : error LNK2001: unresolved external symbol __glewUseProgram
+glwindow.obj : error LNK2001: unresolved external symbol __glewValidateProgram
+glwindow.obj : error LNK2001: unresolved external symbol __glewVertexAttribPointer
+glwindow.obj : error LNK2001: unresolved external symbol __glewBindVertexArray
+glwindow.obj : error LNK2001: unresolved external symbol __glewGenVertexArrays
+D:\code\Glfw\GLFWlearn\x64\Debug\glfwp.exe : fatal error LNK1120: 36 unresolved externals

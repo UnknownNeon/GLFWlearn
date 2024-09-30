@@ -1,5 +1,11 @@
-﻿  glwindow.cpp
+﻿  Application.cpp
+  glwindow.cpp
 D:\code\Glfw\GLFWlearn\src\glwindow.cpp(178,50): warning C4305: 'argument': truncation from 'double' to 'float'
 D:\code\Glfw\GLFWlearn\src\glwindow.cpp(277,33): warning C4101: 'n4': unreferenced local variable
 D:\code\Glfw\GLFWlearn\src\glwindow.cpp(276,33): warning C4101: 'v4': unreferenced local variable
+  Generating Code...
+  LINK : D:\code\Glfw\GLFWlearn\Debug\glfwp.exe not found or not built by the last incremental link; performing full link
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+glew32s.lib(glew.obj) : warning LNK4099: PDB '' was not found with 'glew32s.lib(glew.obj)' or at ''; linking object as if no debug info
   glfwp.vcxproj -> D:\code\Glfw\GLFWlearn\Debug\glfwp.exe

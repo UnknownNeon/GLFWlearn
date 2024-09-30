@@ -1,0 +1,5 @@
+﻿  glwindow.cpp
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(178,50): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(277,33): warning C4101: 'n4': unreferenced local variable
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(276,33): warning C4101: 'v4': unreferenced local variable
+  glfwp.vcxproj -> D:\code\Glfw\GLFWlearn\Debug\glfwp.exe

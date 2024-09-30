@@ -6,26 +6,104 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-typedef
-struct shadesrc {
+#include <vector>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+constexpr int WIDTH = 1366;
+constexpr int HEIGHT = 768;
+
+typedef struct shadesrc {
 	std::string VertexSource;
 	std::string FragmentSource;
-
+	
 }SHADERSRC;
 
-#define FULLSCREEN 1
-#define WINDOWED 0
+struct mvp {
+
+	glm::mat4 model = glm::mat4(1.0f);
+	glm::mat4 view = glm::mat4(1.0f);
+	glm::mat4 projection = glm::mat4(1.0f);
+
+
+	void scale_model(float x = 1, float y = 1, float z = 1) {
+		this->model = glm::scale(model, glm::vec3(x, y, z));
+	}
+
+	void rotate_model(float angle,float x, float y, float z) {
+		this->model = glm::rotate(this->model, angle, glm::vec3(x, y, z));
+	}
+
+	void translate_model(float x, float y, float z) {
+		this->model = glm::translate(model, glm::vec3(x, y, z));
+	}
+	void translate_view(float x, float y, float z) {
+		this->view = glm::translate(view, glm::vec3(x, y, z));
+	}
+
+	void prespective_mode(float fov, float near = -1.f, float far = 100.0f) {
+		this->projection = glm::perspective(glm::radians(fov), (float)WIDTH / (float)HEIGHT, near, far);
+	}
+
+	void orthographic_mode(float left, float right ,float bottom ,float top ,float near = 0.1 ,float far = 100) {
+		this->projection = glm::ortho(left, right, bottom, top , near , far);
+	}
+
+	void config(unsigned int shader_program_id) {
+		int modelLoc = glGetUniformLocation(shader_program_id, "model");
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(this->model));
+
+
+		int viewlLoc = glGetUniformLocation(shader_program_id, "view");
+		glUniformMatrix4fv(viewlLoc, 1, GL_FALSE, glm::value_ptr(this->view));
+
+		int projlLoc = glGetUniformLocation(shader_program_id, "projection");
+		glUniformMatrix4fv(projlLoc, 1, GL_FALSE, glm::value_ptr(this->projection));
+
+	}
+};
 
 class glWindow {
 
-	GLFWwindow* window;
-	
+	//Structures
+	struct Vertex {
+		glm::vec3 position;
+		glm::vec3 color;
+	};
 
-public:
-	GLFWwindow* makeWindowW(const char* NameOfTheWIndow,int Height,int Width, bool isFULLSCREEN, bool Vsync);
-	unsigned int GLvertexIndexBuffers(void* a, int noOfBuffersToGenerate, unsigned int Type, int SizeOf);
+	std::vector<Vertex>			vertices;
+	std::vector<unsigned int>	indices;
+	mvp matrices;
+	
+	//Member Variables 
+	GLFWwindow* instance_pointer;
+	unsigned int shader_program_id;
+	unsigned int vao;
+	unsigned int vcount;
+	unsigned int DynamicVBO;			//Not Yet Implemented 
+
+	//Member Functions 
+	void record_vao();
+	void end_record_vao();
+
+	void init(const char* NameOfTheWIndow,int Height,int Width, bool isFULLSCREEN, bool Vsync);
+	unsigned int create_buffers(void* a, int noOfBuffersToGenerate, unsigned int Type, int SizeOf);
+
+	unsigned int create_dynamic_buffer(unsigned int Type, unsigned int elements_in_array);
+
 	void pollEvents();
-	unsigned int CreateShader(const char* filepath);
+	unsigned int create_shader(const char* filepath);
+	void init();
+
+	void loop();
+
+	//Custom Obj Loader:
+	void load_obj_file(const char* path_to_file);
+
+public :
+
+	glWindow();
 	~glWindow();
 };

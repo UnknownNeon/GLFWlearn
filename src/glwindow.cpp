@@ -134,6 +134,37 @@ static shadesrc Shader(const std::string& filepath)
     return { ss[0].str(), ss[1].str() };
 }
 
+
+void glWindow::loop()
+{
+    while (!glfwWindowShouldClose(this->instance_pointer)) {
+
+        this->pollEvents(); 
+        glBindVertexArray(this->vao);
+
+        matrices.rotate_model(glm::radians(1.0f),0.3,1,0);
+        matrices.config(this->shader_program_id);
+
+        this->push_dbuffer(render_objects.size());
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLES, 0, render_objects.size());
+
+        //glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
+        glfwSwapBuffers(this->instance_pointer);
+
+    }
+}
+void glWindow::translate_object_and_add(float x, float y, float z , std::vector<Vertex> v)
+{
+   
+    for (int i = 0; i < v.size(); i++) {
+        v[i].position =  glm::vec3((glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z)) * glm::vec4(v[i].position, 1.0)));
+        this->render_objects.push_back(v[i]);
+    }
+}
+
+//Create Buffers Section
 unsigned int glWindow::create_buffers(void* a, int noOfBuffersToGenerate, unsigned int Type, int noOfElementsInTheArray)
 {
     unsigned int id;
@@ -159,32 +190,33 @@ unsigned int glWindow::create_buffers(void* a, int noOfBuffersToGenerate, unsign
     }
     return id;
 }
+
 unsigned int glWindow::create_dynamic_buffer(unsigned int type,unsigned int elements_in_array)
 {
     unsigned int id;
     glGenBuffers(1, &id);
     glBindBuffer(type, id);
     glBufferData(type, (elements_in_array * sizeof(Vertex)),nullptr, GL_DYNAMIC_DRAW);
+
+    //Structure of the DATA
+    // Args are : Index , size per vertex , type , normalized , stride , pointer 
+    glVertexAttribPointer(this->vcount, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
+    glEnableVertexAttribArray(this->vcount);
+    vcount++;
+    glVertexAttribPointer(this->vcount, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+    glEnableVertexAttribArray(this->vcount);
+    vcount++;
+
     return id;
 }
 
-void glWindow::loop()
+void glWindow::push_dbuffer(unsigned int elements_in_array)
 {
-    while (!glfwWindowShouldClose(this->instance_pointer)) {
-        this->pollEvents(); 
+    glBindBuffer(GL_ARRAY_BUFFER, this->DynamicVBO);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, elements_in_array * sizeof(Vertex), render_objects.data());
 
-        glBindVertexArray(this->vao);
-
-        matrices.rotate_model(glm::radians(1.0f),0.3,1,0);
-        matrices.config(this->shader_program_id);
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-        //glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
-        glfwSwapBuffers(this->instance_pointer);
-
-    }
 }
+
 void glWindow::record_vao()
 {
     glGenVertexArrays(1, &this->vao);
@@ -203,11 +235,16 @@ void glWindow::init()
 {
 
     this->init("TestWIndow", HEIGHT, WIDTH, false, true);
+    
+
+    this->translate_object_and_add(0, 0, 0, vertices);
+    this->translate_object_and_add(-1.5f, -2.2f, -2.5f, vertices);
+
 
     this->record_vao();
-    //this->DynamicVBO = this->create_dynamic_buffer(GL_ARRAY_BUFFER, vertices.size() * 2 ); //Fixing 
-   
-    this->create_buffers(vertices.data(), 1, GL_ARRAY_BUFFER, vertices.size() * 6);
+    this->DynamicVBO = this->create_dynamic_buffer(GL_ARRAY_BUFFER, render_objects.size()); //Fixing 
+
+    //this->create_buffers(vertices.data(), 1, GL_ARRAY_BUFFER, vertices.size() * 6);
     //this->create_buffers(indices.data(), 1, GL_ELEMENT_ARRAY_BUFFER, indices.size());
     this->end_record_vao();
 
@@ -225,6 +262,8 @@ void glWindow::init()
     glEnable(GL_DEPTH_TEST);
 
     glUseProgram(shader_program_id);
+
+
     this->loop();
 }
 

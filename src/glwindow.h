@@ -84,6 +84,8 @@ class glWindow {
 	unsigned int vcount;
 	unsigned int DynamicVBO;			//Not Yet Implemented 
 
+	std::vector<Vertex> render_objects;
+
 	//Member Functions 
 	void record_vao();
 	void end_record_vao();
@@ -92,7 +94,8 @@ class glWindow {
 	unsigned int create_buffers(void* a, int noOfBuffersToGenerate, unsigned int Type, int SizeOf);
 
 	unsigned int create_dynamic_buffer(unsigned int Type, unsigned int elements_in_array);
-
+	void push_dbuffer(unsigned int elements_in_array);
+	void translate_object_and_add(float x, float y, float z, std::vector<Vertex> v);
 	void pollEvents();
 	unsigned int create_shader(const char* filepath);
 	void init();

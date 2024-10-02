@@ -155,13 +155,41 @@ void glWindow::loop()
 
     }
 }
+
+void glWindow::add_to_scene(std::vector<Vertex> v)
+{
+    this->object_manager.push_back(v);
+    this->bake();
+}
+
+void glWindow::bake()
+{
+    this->render_objects.clear();
+
+    for (int i = 0; i < object_manager.size(); i++) {
+        for (int j = 0; j < object_manager[i].size(); j++) {
+            this->render_objects.push_back(object_manager[i][j]);
+        }
+    }
+}
+
 void glWindow::translate_object_and_add(float x, float y, float z , std::vector<Vertex> v)
 {
-   
     for (int i = 0; i < v.size(); i++) {
         v[i].position =  glm::vec3((glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z)) * glm::vec4(v[i].position, 1.0)));
-        this->render_objects.push_back(v[i]);
     }
+    this->add_to_scene(v);
+}
+
+void glWindow::translate_object(float x, float y, float z ,int item_number)
+{
+    std::vector<Vertex> v = object_manager[item_number];
+
+    for (int i = 0; i < v.size(); i++) {
+        v[i].position = glm::vec3((glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z)) * glm::vec4(v[i].position, 1.0)));
+    }
+    this->object_manager[item_number] = v;
+    this->bake();
 }
 
 //Create Buffers Section
@@ -206,7 +234,10 @@ unsigned int glWindow::create_dynamic_buffer(unsigned int type,unsigned int elem
     glVertexAttribPointer(this->vcount, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
     glEnableVertexAttribArray(this->vcount);
     vcount++;
-
+    glVertexAttribPointer(this->vcount, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texture));
+    glEnableVertexAttribArray(this->vcount);
+    vcount++;
+    
     return id;
 }
 
@@ -233,26 +264,22 @@ void glWindow::end_record_vao()
 
 void glWindow::init()
 {
-
     this->init("TestWIndow", HEIGHT, WIDTH, false, true);
-    
-
-    this->translate_object_and_add(0, 0, 0, vertices);
-    this->translate_object_and_add(-1.5f, -2.2f, -2.5f, vertices);
-
+ 
+    this->add_to_scene(vertices);
+    this->translate_object_and_add(1.5f, 2.2f, 2.5f, vertices);
+    this->translate_object(-1.5f, -2.2f, -2.5f, 0);
 
     this->record_vao();
     this->DynamicVBO = this->create_dynamic_buffer(GL_ARRAY_BUFFER, render_objects.size()); //Fixing 
 
-    //this->create_buffers(vertices.data(), 1, GL_ARRAY_BUFFER, vertices.size() * 6);
-    //this->create_buffers(indices.data(), 1, GL_ELEMENT_ARRAY_BUFFER, indices.size());
     this->end_record_vao();
 
     this->shader_program_id = this->create_shader("Dependencies/Shaders/Shader.shader");
 
     //The MVP matrices 
     matrices.translate_view(0.0f, 0.0f, -12.0f);
-    matrices.prespective_mode(50.0f, 0.1f, 100.0f);
+    matrices.prespective_mode(45.f,0.1,100.f);
     //matrices.orthographic_mode(-WIDTH, WIDTH, -HEIGHT, HEIGHT);
     //matrices.scale_model(500,500); //Scaling 500 TImes
 
@@ -263,7 +290,6 @@ void glWindow::init()
 
     glUseProgram(shader_program_id);
 
-
     this->loop();
 }
 
@@ -271,6 +297,7 @@ void glWindow::init()
 glWindow::glWindow()
 {
     this->load_obj_file("Dependencies/Shaders/mysquare.obj");
+
     this->vcount = 0;
     this->init();
 }
@@ -281,7 +308,7 @@ glWindow::~glWindow()
     glfwTerminate();
 }
 
-//Custom obj loader 
+//Custom obj loader Someday
 void glWindow::load_obj_file(const char* path_to_file)
 {
     int counter = 0;

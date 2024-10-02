@@ -1,5 +1,8 @@
 #pragma once
 
+
+//Strictly 2d 
+
 #include <iostream>
 #include <GLFW/glew.h>
 #include <GLFW/glfw3.h>
@@ -11,6 +14,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
 
 constexpr int WIDTH = 1366;
 constexpr int HEIGHT = 768;
@@ -71,6 +75,7 @@ class glWindow {
 	struct Vertex {
 		glm::vec3 position;
 		glm::vec3 color;
+		glm::vec2 texture;
 	};
 
 	std::vector<Vertex>			vertices;
@@ -78,13 +83,20 @@ class glWindow {
 	mvp matrices;
 	
 	//Member Variables 
+
 	GLFWwindow* instance_pointer;
 	unsigned int shader_program_id;
 	unsigned int vao;
 	unsigned int vcount;
 	unsigned int DynamicVBO;			//Not Yet Implemented 
 
+	//Objects Section
+	std::vector<std::vector<Vertex>> object_manager;
 	std::vector<Vertex> render_objects;
+
+	void add_to_scene(std::vector<Vertex> v);
+	void translate_object(float x, float y, float z ,int item_number);
+	void bake();
 
 	//Member Functions 
 	void record_vao();
@@ -102,7 +114,7 @@ class glWindow {
 
 	void loop();
 
-	//Custom Obj Loader:
+	//Custom Obj Loader: Someday
 	void load_obj_file(const char* path_to_file);
 
 public :

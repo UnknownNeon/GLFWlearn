@@ -1,6 +1,10 @@
 ﻿  glwindow.cpp
 D:\code\Glfw\GLFWlearn\src\glwindow.cpp(145,50): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\code\Glfw\GLFWlearn\src\glwindow.cpp(161,23): warning C4018: '<': signed/unsigned mismatch
-D:\code\Glfw\GLFWlearn\src\glwindow.cpp(316,33): warning C4101: 'n4': unreferenced local variable
-D:\code\Glfw\GLFWlearn\src\glwindow.cpp(315,33): warning C4101: 'v4': unreferenced local variable
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(169,23): warning C4018: '<': signed/unsigned mismatch
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(170,27): warning C4018: '<': signed/unsigned mismatch
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(180,23): warning C4018: '<': signed/unsigned mismatch
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(190,23): warning C4018: '<': signed/unsigned mismatch
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(284,36): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(345,33): warning C4101: 'n4': unreferenced local variable
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(344,33): warning C4101: 'v4': unreferenced local variable
   glfwp.vcxproj -> D:\code\Glfw\GLFWlearn\Debug\glfwp.exe

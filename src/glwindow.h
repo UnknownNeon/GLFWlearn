@@ -15,6 +15,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "obj_loader.h"
 
 constexpr int WIDTH = 1366;
 constexpr int HEIGHT = 768;
@@ -71,12 +72,6 @@ struct mvp {
 
 class glWindow {
 
-	//Structures
-	struct Vertex {
-		glm::vec3 position;
-		glm::vec3 color;
-		glm::vec2 texture;
-	};
 
 	std::vector<Vertex>			vertices;
 	std::vector<unsigned int>	indices;
@@ -98,12 +93,16 @@ class glWindow {
 	void translate_object(float x, float y, float z ,int item_number);
 	void bake();
 
+
+	//ObjLoader 
+	object_loader loader{};
+
 	//Member Functions 
 	void record_vao();
 	void end_record_vao();
 
 	void init(const char* NameOfTheWIndow,int Height,int Width, bool isFULLSCREEN, bool Vsync);
-	unsigned int create_buffers(void* a, int noOfBuffersToGenerate, unsigned int Type, int SizeOf);
+	unsigned int create_buffers(void* a, unsigned int Type, int SizeOf);
 
 	unsigned int create_dynamic_buffer(unsigned int Type, unsigned int elements_in_array);
 	void push_dbuffer(unsigned int elements_in_array);
@@ -113,9 +112,6 @@ class glWindow {
 	void init();
 
 	void loop();
-
-	//Custom Obj Loader: Someday
-	void load_obj_file(const char* path_to_file);
 
 public :
 

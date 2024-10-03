@@ -142,15 +142,16 @@ void glWindow::loop()
         this->pollEvents(); 
         glBindVertexArray(this->vao);
 
-        matrices.rotate_model(glm::radians(1.0f),0.3,1,0);
+        matrices.rotate_model(glm::radians(0.3f),0.3,1,0);
         matrices.config(this->shader_program_id);
 
-        this->push_dbuffer(render_objects.size());
+        this->push_dbuffer(this->render_objects.size());
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLES, 0, render_objects.size());
+        //glDrawArrays(GL_TRIANGLES, 0, this->render_objects.size());
 
-        //glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, nullptr);
+
         glfwSwapBuffers(this->instance_pointer);
 
     }
@@ -169,6 +170,7 @@ void glWindow::bake()
     for (int i = 0; i < object_manager.size(); i++) {
         for (int j = 0; j < object_manager[i].size(); j++) {
             this->render_objects.push_back(object_manager[i][j]);
+        
         }
     }
 }
@@ -193,11 +195,12 @@ void glWindow::translate_object(float x, float y, float z ,int item_number)
 }
 
 //Create Buffers Section
-unsigned int glWindow::create_buffers(void* a, int noOfBuffersToGenerate, unsigned int Type, int noOfElementsInTheArray)
+unsigned int glWindow::create_buffers(void* a, unsigned int Type, int noOfElementsInTheArray)
 {
     unsigned int id;
+
     if (Type == GL_ELEMENT_ARRAY_BUFFER) {
-        glGenBuffers(noOfBuffersToGenerate, &id);
+        glGenBuffers(1, &id);
         glBindBuffer(Type, id);
         glBufferData(Type, noOfElementsInTheArray * sizeof(unsigned int), (unsigned int*)a, GL_STATIC_DRAW); 
     }
@@ -244,8 +247,7 @@ unsigned int glWindow::create_dynamic_buffer(unsigned int type,unsigned int elem
 void glWindow::push_dbuffer(unsigned int elements_in_array)
 {
     glBindBuffer(GL_ARRAY_BUFFER, this->DynamicVBO);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, elements_in_array * sizeof(Vertex), render_objects.data());
-
+    glBufferSubData(GL_ARRAY_BUFFER, 0, elements_in_array * sizeof(Vertex), this->render_objects.data());
 }
 
 void glWindow::record_vao()
@@ -265,27 +267,27 @@ void glWindow::end_record_vao()
 void glWindow::init()
 {
     this->init("TestWIndow", HEIGHT, WIDTH, false, true);
- 
-    this->add_to_scene(vertices);
-    this->translate_object_and_add(1.5f, 2.2f, 2.5f, vertices);
-    this->translate_object(-1.5f, -2.2f, -2.5f, 0);
+    
+    this->add_to_scene(this->vertices);
+    /*this->translate_object_and_add(1.5f, 2.2f, 2.5f, vertices);
+    this->translate_object(-1.5f, -2.2f, -2.5f, 0);*/
 
     this->record_vao();
-    this->DynamicVBO = this->create_dynamic_buffer(GL_ARRAY_BUFFER, render_objects.size()); //Fixing 
-
+    this->DynamicVBO = this->create_dynamic_buffer(GL_ARRAY_BUFFER, this->render_objects.size()); //Fixing 
+    this->create_buffers(this->indices.data(),GL_ELEMENT_ARRAY_BUFFER, this->indices.size());
     this->end_record_vao();
 
     this->shader_program_id = this->create_shader("Dependencies/Shaders/Shader.shader");
 
     //The MVP matrices 
-    matrices.translate_view(0.0f, 0.0f, -12.0f);
+    matrices.translate_view(0.0f, 0.0f, -20.0f);
     matrices.prespective_mode(45.f,0.1,100.f);
     //matrices.orthographic_mode(-WIDTH, WIDTH, -HEIGHT, HEIGHT);
-    //matrices.scale_model(500,500); //Scaling 500 TImes
+    //matrices.scale_model(0.5,0.5,0.5); //Scaling 500 TImes
 
 
     //set wireframemode here:
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glEnable(GL_DEPTH_TEST);
 
     glUseProgram(shader_program_id);
@@ -296,7 +298,12 @@ void glWindow::init()
 //Constructor and destructor side 
 glWindow::glWindow()
 {
-    this->load_obj_file("Dependencies/Shaders/mysquare.obj");
+    
+    std::string loc = "Dependencies/Shaders/BootsForExport.obj";
+    loader.loadObject(loc);
+
+    this->vertices = loader.Object;
+    this->indices = loader.vertex_indices;
 
     this->vcount = 0;
     this->init();
@@ -307,75 +314,3 @@ glWindow::~glWindow()
     //Need to free Buffers 
     glfwTerminate();
 }
-
-//Custom obj loader Someday
-void glWindow::load_obj_file(const char* path_to_file)
-{
-    int counter = 0;
-    
-    Vertex v;
-    std::ifstream file(path_to_file);
-
-    if (file) {
-        std::string line;
-        while (std::getline(file, line)) {
-            if (line[0] == 'v' && line[1] == ' ') {
-                (void)sscanf_s(line.c_str(), "v  %f %f %f", &v.position.x, &v.position.y, &v.position.z);
-
-                if (counter <= 6) {
-                    //1 face :
-                    v.color.x = 1.0f;
-                    v.color.y = 1.0f;
-                    v.color.z = 1.0f;
-                    counter++;
-                }
-                else {
-                    //Making the Color Hard Coded for now:
-                    v.color.x = 1.0f;
-                    v.color.y = 0.0f;
-                    v.color.z = 0.0f;
-                }
-
-                this->vertices.push_back(v);
-            } 
-            if (line[0] == 'f' && line[1] == ' ') {
-                int v1, v2, v3 ,v4;
-                int n1, n2, n3 ,n4;
-                int matches = sscanf_s(line.c_str(), "f %d/%d %d/%d %d/%d ", &v1, &n1,
-                                                                             &v2, &n2,
-                                                                             &v3, &n3 );
-
-                
-                this->indices.push_back(v1);
-                this->indices.push_back(v2);
-                this->indices.push_back(v3);
-            }
-      
-        }
-    }
-    else {
-        std::cout << "Error reading Obj File" << std::endl;
-    }
-
-    std::cout << "Vertex Counts : " << vertices.size() << std::endl;
-    std::cout << "Index Counts : " << indices.size() << std::endl;
-}
-
-
-
-
-/*
-Vertex v1{};
-v1.position = glm::vec3(0.0f, 0.5f, 0.0f);
-v1.color = glm::vec3(1.0f, 0.0f, 0.0f);
-vertices.push_back(v1);
-v1.position = glm::vec3(-0.5f, -0.5f, 0.0f);
-v1.color = glm::vec3(0.0f, 1.0f, 0.0f);
-vertices.push_back(v1);
-v1.position = glm::vec3(0.5f, -0.5f, 0.0f);
-v1.color = glm::vec3(1.0f, 0.0f, 1.0f);
-vertices.push_back(v1);
-
-v1.position = glm::vec3(-0.5f, 0.5f, 0.0f);
-v1.color = glm::vec3(0.0f, 0.0f, 1.0f);
-vertices.push_back(v1);*/

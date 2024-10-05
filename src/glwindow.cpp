@@ -134,7 +134,7 @@ static shadesrc Shader(const std::string& filepath)
     return { ss[0].str(), ss[1].str() };
 }
 
-
+//Main Rendering lOoop
 void glWindow::loop()
 {
     while (!glfwWindowShouldClose(this->instance_pointer)) {
@@ -150,10 +150,11 @@ void glWindow::loop()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //glDrawArrays(GL_TRIANGLES, 0, this->render_objects.size());
 
-        glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, nullptr);
+        for (int i = 0; i < loader.v_i_data.size(); i++) {
+            glDrawElements(GL_TRIANGLES, this->loader.v_i_data[i].vertex_indices.size(), GL_UNSIGNED_INT, nullptr);
+        }
 
         glfwSwapBuffers(this->instance_pointer);
-
     }
 }
 
@@ -274,7 +275,9 @@ void glWindow::init()
 
     this->record_vao();
     this->DynamicVBO = this->create_dynamic_buffer(GL_ARRAY_BUFFER, this->render_objects.size()); //Fixing 
-    this->create_buffers(this->indices.data(),GL_ELEMENT_ARRAY_BUFFER, this->indices.size());
+
+    for(int i=0; i < loader.v_i_data.size(); i++)
+        this->create_buffers(this->loader.v_i_data[i].vertex_indices.data(), GL_ELEMENT_ARRAY_BUFFER, this->loader.v_i_data[i].vertex_indices.size());
     this->end_record_vao();
 
     this->shader_program_id = this->create_shader("Dependencies/Shaders/Shader.shader");
@@ -299,11 +302,10 @@ void glWindow::init()
 glWindow::glWindow()
 {
     
-    std::string loc = "Dependencies/Shaders/BootsForExport.obj";
+    std::string loc = "Dependencies/Shaders/teddy.obj";
     loader.loadObject(loc);
 
     this->vertices = loader.Object;
-    this->indices = loader.vertex_indices;
 
     this->vcount = 0;
     this->init();

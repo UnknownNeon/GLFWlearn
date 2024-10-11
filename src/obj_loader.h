@@ -23,9 +23,11 @@ class object_loader {
 
 public:
 	std::string destination;
-	
 	std::vector<Vertex> Object;
-	std::vector<v_indices> v_i_data;
+
+	std::vector<unsigned int> vertex_indices;
+
+	//std::vector<v_indices> v_i_data;
 
 	void loadObject(std::string& path);
 };

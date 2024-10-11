@@ -5,7 +5,7 @@ void object_loader::loadObject(std::string& path)
 {
     std::string sx, si, sj, sk;
     Vertex v;
-    v_indices vi;
+ /*   v_indices vi;*/
 
     std::ifstream file(path);
 
@@ -13,10 +13,11 @@ void object_loader::loadObject(std::string& path)
         std::string line;
         while (std::getline(file, line)) {
             std::istringstream ss(line);
-             
+            ss >> sx >> si >> sj >> sk;
+
             if (line[0] == 'v' && line[1] == ' ') {
 
-                ss >> sx >> si >> sj >> sk;
+                
 
                 v.position.x = stof(si);
                 v.position.y = stof(sj);
@@ -28,6 +29,18 @@ void object_loader::loadObject(std::string& path)
 
                 this->Object.push_back(v);
             }
+
+            if (sx == "f" || sx == "F") {
+
+                int i = stoi(si);
+                int j = stoi(sj);
+                int k = stoi(sk);
+
+
+                this->vertex_indices.push_back(i);
+                this->vertex_indices.push_back(j);
+                this->vertex_indices.push_back(k);
+            }
         }
     }
     else {
@@ -35,7 +48,9 @@ void object_loader::loadObject(std::string& path)
     }
     file.close();
 
-    bool visited_f = false;
+    //mixed feelings 
+
+    /*bool visited_f = false;
 
     std::ifstream file2(path);
     if (file2) {
@@ -76,8 +91,8 @@ void object_loader::loadObject(std::string& path)
         std::cout << "Cant open file for Indexing " << std::endl;
     }
 
-    file2.close();
+    file2.close();*/
 
     std::cout << "Loaded Vertices:" << this->Object.size() << std::endl;
-    std::cout << "Loaded Indices Count :" << this->v_i_data.size() << std::endl;
+    std::cout << "Loaded Indices Count :" << this->vertex_indices.size() << std::endl;
 }

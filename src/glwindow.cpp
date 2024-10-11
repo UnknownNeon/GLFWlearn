@@ -148,11 +148,9 @@ void glWindow::loop()
         this->push_dbuffer(this->render_objects.size());
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        //glDrawArrays(GL_TRIANGLES, 0, this->render_objects.size());
+        glDrawArrays(GL_TRIANGLES, 0, this->render_objects.size());
 
-        for (int i = 0; i < loader.v_i_data.size(); i++) {
-            glDrawElements(GL_TRIANGLES, this->loader.v_i_data[i].vertex_indices.size(), GL_UNSIGNED_INT, nullptr);
-        }
+        //glDrawElements(GL_TRIANGLES, this->loader.vertex_indices.size(), GL_UNSIGNED_INT, nullptr);
 
         glfwSwapBuffers(this->instance_pointer);
     }
@@ -269,17 +267,13 @@ void glWindow::init()
 {
     this->init("TestWIndow", HEIGHT, WIDTH, false, true);
     
-    this->add_to_scene(this->vertices);
-    /*this->translate_object_and_add(1.5f, 2.2f, 2.5f, vertices);
-    this->translate_object(-1.5f, -2.2f, -2.5f, 0);*/
+    this->add_to_scene(this->loader.Object);
+    this->translate_object_and_add(1.5f, 2.2f, 2.5f, this->loader.Object);
+
+    /*this->translate_object(-1.5f, -2.2f, -2.5f, 0);*/
 
     this->record_vao();
     this->DynamicVBO = this->create_dynamic_buffer(GL_ARRAY_BUFFER, this->render_objects.size()); //Fixing 
-
-    for(int i=0; i < loader.v_i_data.size(); i++)
-        this->create_buffers(this->loader.v_i_data[i].vertex_indices.data(), GL_ELEMENT_ARRAY_BUFFER, this->loader.v_i_data[i].vertex_indices.size());
-    this->end_record_vao();
-
     this->shader_program_id = this->create_shader("Dependencies/Shaders/Shader.shader");
 
     //The MVP matrices 
@@ -302,11 +296,9 @@ void glWindow::init()
 glWindow::glWindow()
 {
     
-    std::string loc = "Dependencies/Shaders/teddy.obj";
+    std::string loc = "Dependencies/Shaders/mysquare.obj";
     loader.loadObject(loc);
-
-    this->vertices = loader.Object;
-
+    
     this->vcount = 0;
     this->init();
 }

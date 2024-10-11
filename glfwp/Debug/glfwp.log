@@ -1,2 +1,8 @@
-﻿  obj_loader.cpp
+﻿  glwindow.cpp
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(145,50): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(169,23): warning C4018: '<': signed/unsigned mismatch
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(170,27): warning C4018: '<': signed/unsigned mismatch
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(179,23): warning C4018: '<': signed/unsigned mismatch
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(189,23): warning C4018: '<': signed/unsigned mismatch
+D:\code\Glfw\GLFWlearn\src\glwindow.cpp(281,36): warning C4305: 'argument': truncation from 'double' to 'float'
   glfwp.vcxproj -> D:\code\Glfw\GLFWlearn\Debug\glfwp.exe
